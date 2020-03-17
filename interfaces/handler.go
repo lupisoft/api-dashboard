@@ -1,6 +1,7 @@
 package interfaces
 
 import (
+	"github.com/gorilla/mux"
 	"main/interfaces/util"
 	"net/http"
 )
@@ -14,9 +15,9 @@ func NewHandlerPong() HandlerPong {
 
 func (handler HandlerPong) GetPong(respuesta http.ResponseWriter, peticion *http.Request) {
 
-	result := "pong"
+	v := mux.Vars(peticion)
 
-	util.JSON(respuesta,200,result)
+	util.JSON(respuesta,200,v)
 }
 
 
