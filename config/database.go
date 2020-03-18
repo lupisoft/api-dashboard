@@ -1,28 +1,15 @@
 package config
 
 import (
-	"database/sql"
-	"fmt"
-	"os"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-func NewDBConnection() (*sql.DB, error) {
-	user := getEnvWithDefault("DB_USER", "root")
-	password := getEnvWithDefault("DB_PASSWORD", "")
-	host := getEnvWithDefault("DB_HOST", "localhost")
-	port := getEnvWithDefault("DB_PORT", "3306")
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/ddd_sample?parseTime=true", user, password, host, port)
-	db, err := sql.Open("mysql", dsn)
-	if err != nil {
-		return nil, err
-	}
-	return db, nil
-}
+func NewDBConnection() (*gorm.DB) {
 
-func getEnvWithDefault(name, def string) string {
-	env := os.Getenv(name)
-	if len(env) != 0 {
-		return env
+	db, err := gorm.Open("mysql", "lupisoft:Agus17533542.@/ddd_sample?charset=utf8&parseTime=True&loc=Local")
+	if err != nil {
+		panic("Error connection to database !!")
 	}
-	return def
+	return db
 }
