@@ -3,9 +3,8 @@ module main
 go 1.13
 
 require (
+	github.com/gin-gonic/gin v1.5.0
 	github.com/golang/mock v1.4.1
 	github.com/gorilla/mux v1.7.4
-	github.com/pkg/errors v0.9.1 // indirect
-	github.com/takashabe/go-router v0.0.0-20180130155705-1eefa4c80f55
-	rsc.io/quote v1.5.2
+	github.com/stretchr/testify v1.5.1
 )
