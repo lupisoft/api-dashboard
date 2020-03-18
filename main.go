@@ -8,24 +8,18 @@ import (
 	"time"
 )
 
-func main()  {
-
+func main() {
 	router := mux.NewRouter()
 	port := ":8000"
-
 	server := &http.Server{
-		Handler: router,
-		Addr:    port,
+		Handler:      router,
+		Addr:         port,
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}
 
 	handler := interfaces.NewHandlerPong()
-	router.HandleFunc("/{var}/ping", handler.GetPong ).Methods("GET")
+	router.HandleFunc("/ping", handler.GetPong).Methods("GET")
 
 	log.Fatal(server.ListenAndServe())
 }
-
-
-
-
