@@ -9,7 +9,6 @@ import (
 )
 
 func main()  {
-	config.NewDBConnection()
 	configuration := config.BuildConfiguration()
 	router := mux.NewRouter()
 	server := &http.Server{
@@ -18,6 +17,8 @@ func main()  {
 		WriteTimeout: configuration.Server.WriteTimeOut,
 		ReadTimeout:  configuration.Server.ReadTimeOut,
 	}
+
+	config.NewDBBuilder(configuration.DataBase)
 
 	handler := interfaces.NewHandlerPong()
 	router.HandleFunc("/ping", handler.GetPong).Methods("GET")

@@ -5,11 +5,24 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-func NewDBConnection() *gorm.DB {
-	db, err := gorm.Open("mysql", "lupisoft:Agus17533542.@/ddd_sample?charset=utf8&parseTime=True&loc=Local")
-	if err != nil {
-		panic("Error connection to database !!")
-	}
+type DBClient struct {
+	StringConnection string
+	Dialect          string
+	GetConnection    func(dialect string, connLine string) (*gorm.DB, error)
+}
 
-	return db
+func NewDBBuilder(dbConfig DataBase) DBClient {
+	return DBClient{
+		StringConnection: dbConfig.StringConnection,
+		Dialect:          dbConfig.Dialect,
+		GetConnection: func(dialect string, connLine string) (db *gorm.DB, err error) {
+			dbGorm, err := gorm.Open(dialect, connLine)
+			if err != nil {
+				return nil, err
+			}
+			dbGorm.DB().SetMaxIdleConns(20)
+			dbGorm.DB().SetMaxOpenConns(40)
+			return dbGorm, nil
+		},
+	}
 }
