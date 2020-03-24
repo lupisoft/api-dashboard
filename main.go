@@ -3,19 +3,19 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"log"
+	"main/config"
 	"main/interfaces"
 	"net/http"
-	"time"
 )
 
 func main() {
+	configuration := config.BuildConfiguration()
 	router := mux.NewRouter()
-	port := ":8000"
 	server := &http.Server{
 		Handler:      router,
-		Addr:         port,
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
+		Addr:         configuration.Server.Port,
+		WriteTimeout: configuration.Server.WriteTimeOut,
+		ReadTimeout:  configuration.Server.ReadTimeOut,
 	}
 
 	handler := interfaces.NewHandlerPong()
