@@ -6,20 +6,17 @@ import (
 	"main/config"
 	"main/interfaces"
 	"net/http"
-	"time"
 )
 
-func main() {
-
+func main()  {
 	config.NewDBConnection()
-
+	configuration := config.BuildConfiguration()
 	router := mux.NewRouter()
-	port := ":8000"
 	server := &http.Server{
 		Handler:      router,
-		Addr:         port,
-		WriteTimeout: 15 * time.Second,
-		ReadTimeout:  15 * time.Second,
+		Addr:         configuration.Server.Port,
+		WriteTimeout: configuration.Server.WriteTimeOut,
+		ReadTimeout:  configuration.Server.ReadTimeOut,
 	}
 
 	handler := interfaces.NewHandlerPong()
@@ -27,3 +24,7 @@ func main() {
 
 	log.Fatal(server.ListenAndServe())
 }
+
+
+
+
