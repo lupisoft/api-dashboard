@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func main()  {
+func main() {
 	configuration := config.BuildConfiguration()
 	router := mux.NewRouter()
 	server := &http.Server{
@@ -18,14 +18,10 @@ func main()  {
 		ReadTimeout:  configuration.Server.ReadTimeOut,
 	}
 
-	config.NewDBBuilder(configuration.DataBase)
+	config.NewDBClientBuilder(configuration.DataBase)
 
 	handler := interfaces.NewHandlerPong()
 	router.HandleFunc("/ping", handler.GetPong).Methods("GET")
 
 	log.Fatal(server.ListenAndServe())
 }
-
-
-
-

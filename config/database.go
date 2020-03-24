@@ -11,7 +11,7 @@ type DBClient struct {
 	GetConnection    func(dialect string, connLine string) (*gorm.DB, error)
 }
 
-func NewDBBuilder(dbConfig DataBase) DBClient {
+func NewDBClientBuilder(dbConfig DataBase) DBClient {
 	return DBClient{
 		StringConnection: dbConfig.StringConnection,
 		Dialect:          dbConfig.Dialect,
