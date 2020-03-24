@@ -24,15 +24,20 @@ func BuildConfiguration() Configurations {
 	}
 
 	return configuration
-
 }
 
 type Configurations struct {
 	Server Server
+	DataBase DataBase
 }
 
 type Server struct {
 	Port         string
 	WriteTimeOut time.Duration
 	ReadTimeOut  time.Duration
+}
+
+type DataBase struct {
+	StringConnection string
+	Dialect          string
 }

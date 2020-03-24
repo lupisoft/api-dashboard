@@ -2,3 +2,7 @@ Server:
   port: ":8000"
   writeTimeOut: 150000
   readTimeOut: 150000
+
+DataBase:
+  stringConnection: "root@/dashboard?charset=utf8&parseTime=True&loc=Local"
+  dialect: "mysql"

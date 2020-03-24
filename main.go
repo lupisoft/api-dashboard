@@ -18,6 +18,8 @@ func main() {
 		ReadTimeout:  configuration.Server.ReadTimeOut,
 	}
 
+	config.NewDBClientBuilder(configuration.DataBase)
+
 	handler := interfaces.NewHandlerPong()
 	router.HandleFunc("/ping", handler.GetPong).Methods("GET")
 
