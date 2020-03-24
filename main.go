@@ -9,9 +9,7 @@ import (
 )
 
 func main() {
-
 	configuration := config.BuildConfiguration()
-
 	router := mux.NewRouter()
 	server := &http.Server{
 		Handler:      router,
