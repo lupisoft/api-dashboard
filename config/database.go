@@ -22,6 +22,8 @@ func NewDBClientBuilder(dbConfig DataBase) DBClient {
 			}
 			dbGorm.DB().SetMaxIdleConns(20)
 			dbGorm.DB().SetMaxOpenConns(40)
+			dbGorm.SingularTable(true)
+			dbGorm.LogMode(true)
 			return dbGorm, nil
 		},
 	}
