@@ -12,14 +12,10 @@ import (
 func TestGetUser(t *testing.T) {
 	configDB := config.DataBase{Dialect: "mysql", StringConnection: "root@/dashboard?charset=utf8&parseTime=True&loc=Local"}
 	dbClient := config.NewDBClientBuilder(configDB)
-	_, err := dbClient.GetConnection(dbClient.Dialect, dbClient.StringConnection)
-	if err != nil {
-		t.Fatalf("want non error, got %#v", err)
-	}
 
 	cases := []struct {
 		input      int
-		expectUser *domain.Metric
+		expectMetric *domain.Metric
 		expectErr  error
 	}{
 		{
@@ -45,8 +41,8 @@ func TestGetUser(t *testing.T) {
 		if err != nil {
 			continue
 		}
-		if !reflect.DeepEqual(user, c.expectUser) {
-			t.Errorf("#%d: want %#v, got %#v", i, c.expectUser, user)
+		if !reflect.DeepEqual(user, c.expectMetric) {
+			t.Errorf("#%d: want %#v, got %#v", i, c.expectMetric, user)
 		}
 	}
 }

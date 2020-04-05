@@ -28,3 +28,11 @@ func NewDBClientBuilder(dbConfig DataBase) DBClient {
 		},
 	}
 }
+
+func NewDBClientBuilderMock(getConnection func(dialect string, connLine string) (*gorm.DB, error)) DBClient {
+	return DBClient{
+		StringConnection: "mock",
+		Dialect:          "mock",
+		GetConnection:    getConnection,
+	}
+}
