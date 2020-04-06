@@ -44,16 +44,18 @@ func TestExecuteQuery(t *testing.T) {
 	}
 	dbClient := config.NewDBClientBuilderMock(getConnection)
 
+	expectedResult := []map[string]interface {}{{"id":"1", "nombre":"metric1"},{"id":"2", "nombre":"metric2"}}
 	mock.ExpectQuery("select  \\* from metricas where id \\>\\= '1'").
 		WillReturnRows(sqlmock.NewRows([]string{"id", "nombre"}).
 			AddRow("1", "metric1").
-			AddRow("2", "metric1"))
+			AddRow("2", "metric2"))
 
 	params := make(map[string]string)
 	params[":id_metric"] = "1"
 
-	result, err := executeQuery(dbClient , "select * from metricas where id >= :id_metric", params)
+	result, err := executeQuery(dbClient, "select * from metricas where id >= :id_metric", params)
 
 	assert.NoError(t, err)
 	assert.Equal(t, 2, len(result))
+	assert.Equal(t, expectedResult, result)
 }
