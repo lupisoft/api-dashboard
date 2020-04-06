@@ -18,23 +18,28 @@ func TestGetAllCategories(t *testing.T) {
 	}{
 		{
 			[]*domain.Category{{
-				ID:   2,
-				Name: "metric1",
+				ID:   1,
+				Name: "category1",
 			}, {
 				ID:   2,
-				Name: "metric1",
+				Name: "category2",
 			},
 			},
 			nil,
 			func(m sqlmock.Sqlmock) {
-				m.ExpectQuery("SELECT \\* FROM `categorias`").WillReturnRows(sqlmock.NewRows([]string{"id", "nombre"}).AddRow("2", "metric1").AddRow("2", "metric1"))
+				m.ExpectQuery("SELECT \\* FROM `categorias`").
+					WillReturnRows(sqlmock.NewRows([]string{"id", "nombre"}).
+						AddRow("1", "category1").
+						AddRow("2", "category2"))
 			},
 		},
 		{
 			nil,
 			errors.New("record not found"),
 			func(m sqlmock.Sqlmock) {
-				m.ExpectQuery("SELECT \\* FROM `categorias`").WillReturnRows(sqlmock.NewRows([]string{""})).WillReturnError(errors.New("record not found"))
+				m.ExpectQuery("SELECT \\* FROM `categorias`").
+					WillReturnRows(sqlmock.NewRows([]string{""})).
+					WillReturnError(errors.New("record not found"))
 			},
 		},
 	}

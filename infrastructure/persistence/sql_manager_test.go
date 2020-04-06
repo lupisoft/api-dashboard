@@ -1,6 +1,8 @@
 package persistence
 
 import (
+	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
 	"main/config"
 	"testing"
@@ -24,12 +26,34 @@ func TestGetQuery(t *testing.T) {
 }
 
 func TestExecuteQuery(t *testing.T) {
-	configDB := config.DataBase{Dialect: "mysql", StringConnection: "root@/dashboard?charset=utf8&parseTime=True&loc=Local"}
-	dbClient := config.NewDBClientBuilder(configDB)
+	sqlDb, mock, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+
+	getConnection := func(dialect string, connLine string) (db *gorm.DB, err error) {
+		dbGorm, err := gorm.Open("mysql", sqlDb)
+		if err != nil {
+			panic("failed to connect database")
+		}
+		dbGorm.DB().SetMaxIdleConns(25)
+		dbGorm.DB().SetMaxOpenConns(50)
+		dbGorm.LogMode(true)
+		dbGorm.SingularTable(true)
+		return dbGorm, nil
+	}
+	dbClient := config.NewDBClientBuilderMock(getConnection)
+
+	mock.ExpectQuery("select  \\* from metricas where id \\>\\= '1'").
+		WillReturnRows(sqlmock.NewRows([]string{"id", "nombre"}).
+			AddRow("1", "metric1").
+			AddRow("2", "metric1"))
+
 	params := make(map[string]string)
 	params[":id_metric"] = "1"
 
-	result, _ := executeQuery(dbClient , "select * from metricas where id >= :id_metric", params)
+	result, err := executeQuery(dbClient , "select * from metricas where id >= :id_metric", params)
 
-	assert.Equal(t, 1, len(result))
+	assert.NoError(t, err)
+	assert.Equal(t, 2, len(result))
 }
