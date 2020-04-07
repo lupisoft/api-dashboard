@@ -22,7 +22,17 @@ func NewDBClientBuilder(dbConfig DataBase) DBClient {
 			}
 			dbGorm.DB().SetMaxIdleConns(20)
 			dbGorm.DB().SetMaxOpenConns(40)
+			dbGorm.SingularTable(true)
+			dbGorm.LogMode(true)
 			return dbGorm, nil
 		},
+	}
+}
+
+func NewDBClientBuilderMock(getConnection func(dialect string, connLine string) (*gorm.DB, error)) DBClient {
+	return DBClient{
+		StringConnection: "mock",
+		Dialect:          "mock",
+		GetConnection:    getConnection,
 	}
 }

@@ -17,7 +17,6 @@ func main() {
 		WriteTimeout: configuration.Server.WriteTimeOut,
 		ReadTimeout:  configuration.Server.ReadTimeOut,
 	}
-
 	config.NewDBClientBuilder(configuration.DataBase)
 
 	handler := interfaces.NewHandlerPong()
