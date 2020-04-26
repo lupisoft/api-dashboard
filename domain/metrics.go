@@ -1,5 +1,7 @@
 package domain
 
+import "strings"
+
 type Metric struct {
 	ID             int         `gorm:"primary_key;column:id"`
 	TypeMetric     TypeMetric  `gorm:"foreignkey:TypeMetricID"`
@@ -54,4 +56,19 @@ func (Subcategory) TableName() string {
 
 func (Category) TableName() string {
 	return "categorias"
+}
+
+func (m Metric) GetMapInternalParam() map[string]string {
+	result := make(map[string]string)
+	firstSplit := strings.Split(m.InternalParams, ";")
+
+	for _, elem := range firstSplit {
+		secondSplit := strings.Split(elem, "=>")
+
+		if len(secondSplit) == 2 {
+			result[secondSplit[0]] = secondSplit[1]
+		}
+	}
+
+	return result
 }
